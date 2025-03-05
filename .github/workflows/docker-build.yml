@@ -16,10 +16,7 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
-        with:
-          repository: langgenius/dify
-          ref: refs/tags/0.15.3
-
+        
       - name: Copy deploy folder to remote staging server
         uses: appleboy/scp-action@v0.1.7
         if: ${{ inputs.environment == 'staging' }}
