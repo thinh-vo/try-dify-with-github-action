@@ -15,7 +15,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
-        run: git clone https://github.com/langgenius/dify.git && cd diffy && git pull
+        run: git clone https://github.com/langgenius/dify.git
+
+      - name: Checkout repo 2
+        run: cd diffy && git pull
         
       - name: Copy deploy folder to remote staging server
         uses: appleboy/scp-action@v0.1.7
