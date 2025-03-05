@@ -26,7 +26,7 @@ jobs:
         with:
           host: 103.112.211.145
           username: root
-          key: ${{ secrets.SSH_PRIVATE_KEY_UATSTAGING }}
+          password: soE6n1pzLqNofO
           source: ./*
           target: ./*
           strip_components: 2
