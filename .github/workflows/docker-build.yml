@@ -24,7 +24,7 @@ jobs:
         uses: appleboy/scp-action@v0.1.7
         if: ${{ inputs.environment == 'staging' }}
         with:
-          host: ${{ secrets.SSH_HOST_STAGING }}
+          host: 103.112.211.145
           username: root
           key: ${{ secrets.SSH_PRIVATE_KEY_UATSTAGING }}
           source: services/quivr/supabase/*
