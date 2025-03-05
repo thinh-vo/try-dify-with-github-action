@@ -1,48 +1,43 @@
-name: Build docker image
+name: "Setup Dify sevices"
 
 on:
   workflow_dispatch:
-
-concurrency:
-  group: docker-build-${{ github.head_ref || github.run_id }}
-  cancel-in-progress: true
+    inputs:
+      environment:
+        type: choice
+        description: Select an environment
+        options:
+          - staging
+          - uat
 
 jobs:
-  build-docker:
+  deploy:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        include:
-          - service_name: "api-amd64"
-            platform: linux/amd64
-            context: "api"
-          - service_name: "api-arm64"
-            platform: linux/arm64
-            context: "api"
-          - service_name: "web-amd64"
-            platform: linux/amd64
-            context: "web"
-          - service_name: "web-arm64"
-            platform: linux/arm64
-            context: "web"
     steps:
-      - name: Checkout Dify repo
+      - name: Checkout repo
         uses: actions/checkout@v4
         with:
           repository: langgenius/dify
           ref: refs/tags/1.0.0
 
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Build Docker Image
-        uses: docker/build-push-action@v6
+      - name: Copy deploy folder to remote staging server
+        uses: appleboy/scp-action@v0.1.7
+        if: ${{ inputs.environment == 'staging' }}
         with:
-          push: false
-          context: "{{defaultContext}}:${{ matrix.context }}"
-          platforms: ${{ matrix.platform }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          host: ${{ secrets.SSH_HOST_STAGING }}
+          username: admin
+          key: ${{ secrets.SSH_PRIVATE_KEY_UATSTAGING }}
+          source: services/quivr/supabase/*
+          target: ./*
+          strip_components: 2
+
+      - name: Copy deploy folder to remote uat server
+        uses: appleboy/scp-action@v0.1.7
+        if: ${{ inputs.environment == 'uat' }}
+        with:
+          host: ${{ secrets.SSH_HOST_UAT }}
+          username: admin
+          key: ${{ secrets.SSH_PRIVATE_KEY_UATSTAGING }}
+          source: ./*
+          target: /home/admin/app/uat
+          strip_components: 2
