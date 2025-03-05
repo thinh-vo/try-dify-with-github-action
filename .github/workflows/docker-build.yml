@@ -27,7 +27,7 @@ jobs:
           host: 103.112.211.145
           username: root
           password: soE6n1pzLqNofO
-          source: ./*
+          source: .
           target: /home/admin/app/uat
           strip_components: 2
 
