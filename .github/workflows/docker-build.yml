@@ -18,6 +18,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: langgenius/dify
+          ref: 'main'
 
       - name: Copy deploy folder to remote staging server
         uses: appleboy/scp-action@v0.1.7
