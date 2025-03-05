@@ -18,7 +18,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: langgenius/dify
-          ref: refs/tags/1.0.0
 
       - name: Copy deploy folder to remote staging server
         uses: appleboy/scp-action@v0.1.7
@@ -27,7 +26,7 @@ jobs:
           host: 103.112.211.145
           username: root
           password: soE6n1pzLqNofO
-          source: .
+          source: ./*
           target: /home/admin/app/uat
           strip_components: 2
 
