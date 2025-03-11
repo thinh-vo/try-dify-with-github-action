@@ -10,25 +10,41 @@ on:
           - staging
           - uat
 
+name: "Setup Dify sevices"
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        type: choice
+        description: Select an environment
+        options:
+          - staging
+          - uat
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Checkout repo
-        run: git clone https://github.com/langgenius/dify.git
-        
-      - name: Copy deploy folder to remote staging server
-        uses: appleboy/scp-action@v0.1.7
-        if: ${{ inputs.environment == 'staging' }}
+      - name: SSH into server
+        uses: appleboy/ssh-action@master
         with:
           host: 103.112.211.145
           username: root
-          password: soE6n1pzLqNofO
-          source: dify/*
-          target: /home/admin/app/uat
-          strip_components: 2
+          password: soE6n1pzLqNof12
+          script: |
+            echo "SSH successful"
+            #Optional: navigate to a directory where you want to clone
+            cd /home
+            # Step 2: Git clone the public repository
+            git clone https://github.com/langgenius/dify.git --branch 0.15.3
+            echo "Repository cloned"
+            #step 3: set up env
+            cd dify/docker
+            cp .env.example .env
+            docker compose up -d
+
+
+
 
     
