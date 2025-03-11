@@ -23,11 +23,12 @@ jobs:
           script: |
             echo "SSH successful"
             #Optional: navigate to a directory where you want to clone
-            cd /home
-            # Step 2: Git clone the public repository
-            git clone https://github.com/langgenius/dify.git --branch 0.15.3
+            cd /home/apps
+            # Step 2: Git clone the public repository if not exists
+            if cd dify; then git pull; else git clone https://github.com/langgenius/dify.git --branch 0.15.3; fi
             echo "Repository cloned"
             #step 3: set up env
-            cd dify/docker
+            cd /home/apps/dify/docker
             cp .env.example .env
             docker compose up -d
+
