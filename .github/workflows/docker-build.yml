@@ -10,18 +10,6 @@ on:
           - staging
           - uat
 
-name: "Setup Dify sevices"
-
-on:
-  workflow_dispatch:
-    inputs:
-      environment:
-        type: choice
-        description: Select an environment
-        options:
-          - staging
-          - uat
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -43,8 +31,3 @@ jobs:
             cd dify/docker
             cp .env.example .env
             docker compose up -d
-
-
-
-
-    
